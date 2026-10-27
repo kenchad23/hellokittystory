@@ -592,3 +592,32 @@ main::-webkit-scrollbar {
     object-fit: cover !important;
     object-position: center;
 }
+
+
+/* Extra breathing room for story panels */
+
+.scene {
+    padding: 12px 0 16px;
+}
+
+.scene-inner {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.photo-frame {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
