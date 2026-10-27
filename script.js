@@ -59,9 +59,8 @@ photos.forEach((src, index) => {
   img.style.opacity = "1";
   img.style.visibility = "visible";
 
-  img.addEventListener("load", () => {
+ img.addEventListener("load", () => {
   inner.classList.add("has-image");
-  section.style.setProperty("--photo", `url("${src}")`);
 });
 
   img.addEventListener("error", () => {
