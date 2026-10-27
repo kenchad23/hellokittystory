@@ -1,608 +1,134 @@
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+:root{--bg:#f9dce9;--ink:#67475d;--muted:#8d7286;--accent:#b86692;--header-height:68px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:'DM Sans',sans-serif;background:var(--bg);overflow-x:hidden}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}.ambient{position:fixed;inset:0;background:linear-gradient(155deg,#ffe5ee,#e9e1fa 55%,#d9eafb);z-index:-1;transition:background 1s;pointer-events:none}.topbar{position:fixed;z-index:20;top:0;left:0;right:0;min-height:var(--header-height);padding:16px max(20px,env(safe-area-inset-right)) 12px max(20px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.43);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.brand{font-weight:700;font-size:13px;color:var(--ink);text-decoration:none}.controls{display:flex;align-items:center;gap:13px;font-size:12px;font-weight:700}#musicBtn{border:1px solid #cda8bd;background:rgba(255,255,255,.65);color:var(--ink);border-radius:20px;padding:7px 12px;font-size:12px}.progress-track{position:absolute;bottom:0;left:0;width:100%;height:3px;background:rgba(149,91,132,.12)}.progress-bar{width:0;height:100%;background:#b86692;transition:width .15s linear}.intro,.finale{min-height:100svh;min-height:100dvh;display:grid;place-items:center;text-align:center;padding:110px 26px 65px;position:relative}.intro-inner,.finale-content{max-width:460px}.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:11px;font-weight:700;color:#aa7896}.intro h1,.finale h2{font-family:'Playfair Display',serif;font-size:clamp(56px,14vw,88px);line-height:1.04;margin:22px 0;color:#875474}.intro h1 em{font-weight:600;color:#b77fa8}.intro p{line-height:1.8;color:#876b80}.start-link,.primary-btn{display:inline-block;margin-top:32px;padding:15px 26px;border-radius:99px;background:#aa6b94;color:#fff;text-decoration:none;border:0;font-weight:700;box-shadow:0 10px 25px #a96a9433}.scroll-cue{position:absolute;bottom:24px;font-size:11px;letter-spacing:.1em;color:#98788d}.scene{min-height:110svh;min-height:110dvh;display:flex;justify-content:center;align-items:center;position:relative;padding:90px 20px 70px;overflow:hidden}.scene::before{content:'';position:absolute;inset:0;background:var(--scene-bg);opacity:.72;z-index:-1}.scene-inner{width:min(100%,460px);will-change:transform,opacity;transition:filter .2s}.scene-label{text-align:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#86667d;margin:0 0 14px}.photo-frame{width:100%;max-height:calc(100dvh - 155px);aspect-ratio:9/16;position:relative;overflow:hidden;border-radius:20px;box-shadow:0 22px 60px #78556d27;background:#fff6fb;display:grid;place-items:center}.photo-frame img{width:100%;height:100%;object-fit:contain;display:block}.placeholder{position:absolute;inset:0;display:grid;place-content:center;gap:14px;text-align:center;padding:30px;background:linear-gradient(145deg,#ffe2ed,#e2dffc 60%,#d6eafd)}.placeholder-number{font-family:'Playfair Display',serif;font-size:clamp(70px,20vw,110px);color:#b782a8}.placeholder span:last-child{font-size:12px;color:#886d83;line-height:1.7}.scene-inner.has-image .placeholder{display:none}.finale{background:linear-gradient(160deg,#ffe3f1,#e6ddff 60%,#d5eafb);overflow:hidden}.finale-content{position:relative;z-index:2;opacity:0;transform:translateY(30px);transition:opacity 1s,transform 1s}.finale.is-visible .finale-content{opacity:1;transform:translateY(0)}.cake{font-size:70px;margin-top:18px;animation:float 4s ease-in-out infinite}.finale h2{font-size:clamp(44px,11vw,72px)}.birthday-message{font-size:15px;line-height:1.9;max-width:360px;margin:auto}.replay-link{display:block;margin-top:24px;color:#8c6481;text-underline-offset:4px;font-size:13px}#confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}@keyframes float{50%{transform:translateY(-10px)}}@media(min-width:700px){.scene{padding-block:105px}.photo-frame{width:min(100%,380px);margin:auto}.scene-label{margin-bottom:20px}.intro,.finale{padding-top:120px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.scene-inner{transform:none!important;opacity:1!important}.finale-content{opacity:1!important;transform:none!important}}
 
-/* ========================================
-   1. GLOBAL SETTINGS
-======================================== */
+/* Horizontal story: one complete slide per swipe. */
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+main{display:flex;flex-direction:row;width:100%;height:100dvh;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x}
+main::-webkit-scrollbar{display:none}
+.intro,.scene,.finale{flex:0 0 100vw;width:100vw;height:100dvh;min-height:0;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden}
+.scene{padding:80px 16px 22px}
+.scene-inner{width:min(100%,460px);opacity:.6;transform:translateX(24px) scale(.98);transition:opacity .55s ease,transform .65s ease}
+.scene.is-active .scene-inner{opacity:1;transform:translateX(0) scale(1)}
+.photo-frame{max-height:calc(100dvh - 132px);max-width:calc((100dvh - 132px)*9/16);margin:auto}
+.intro,.finale{padding-top:85px;padding-bottom:24px}
+@media(min-width:700px){.scene{padding:85px 16px 20px}.photo-frame{width:min(100%,380px);max-height:calc(100dvh - 135px)}}
+@media(prefers-reduced-motion:reduce){main{scroll-behavior:auto}.scene-inner{opacity:1;transform:none}}
 
-:root {
-    --bg: #f9dce9;
-    --ink: #67475d;
-    --muted: #8d7286;
-    --accent: #b86692;
-    --header-height: 68px;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-}
-
-button,
-a {
-    -webkit-tap-highlight-color: transparent;
-}
-
-button {
-    font: inherit;
-    cursor: pointer;
-}
-
-/* ========================================
-   2. BACKGROUND
-======================================== */
-
-.ambient {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-
-    background: linear-gradient(
-        155deg,
-        #ffe5ee,
-        #e9e1fa 55%,
-        #d9eafb
-    );
-
-    transition: background 1s ease;
-    pointer-events: none;
-}
-
-/* ========================================
-   3. FIXED HEADER
-======================================== */
-
-.topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 20;
-
-    height: var(--header-height);
-
-    padding: 12px max(16px, env(safe-area-inset-right))
-             12px max(16px, env(safe-area-inset-left));
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-
-    background: rgba(255, 255, 255, 0.65);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.brand {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-    text-decoration: none;
-}
-
-.controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    font-size: 12px;
-    font-weight: 700;
-}
-
-#musicBtn {
-    padding: 8px 12px;
-
-    border: 1px solid #cda8bd;
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, 0.75);
-    color: var(--ink);
-
-    font-size: 12px;
-}
-
-/* ========================================
-   4. STORY PROGRESS BAR
-======================================== */
-
-.progress-track {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-    height: 3px;
-
-    background: rgba(149, 91, 132, 0.12);
-}
-
-.progress-bar {
-    width: 0;
-    height: 100%;
-
-    background: var(--accent);
-
-    transition: width 0.15s linear;
-}
-
-/* ========================================
-   5. HORIZONTAL SWIPING
-======================================== */
-
-main {
-    display: flex;
-    flex-direction: row;
-
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-
-    touch-action: pan-x;
-
-    scrollbar-width: none;
-}
-
-main::-webkit-scrollbar {
-    display: none;
-}
-
-/* Allow all story scenes to participate
-   directly in the horizontal layout */
-
+/* Keep the 25 story panels in the horizontal layout */
 #story {
     display: contents;
 }
 
-/* ========================================
-   6. ALL SLIDES
-======================================== */
-
-.intro,
-.scene,
-.finale {
-    flex: 0 0 100%;
+/* Show the original portrait images */
+.photo-frame img {
+    display: block;
     width: 100%;
-
-    height: 100vh;
-    height: 100dvh;
-
-    min-height: 0;
-
-    position: relative;
-    overflow: hidden;
-
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+    height: 100%;
+    object-fit: contain;
+    opacity: 1;
+    visibility: visible;
 }
 
-/* ========================================
-   7. STORY SCENES
-======================================== */
+/* Full-screen portrait image fix */
 
 .scene {
+    padding: 0 !important;
+    height: 100dvh;
     display: flex;
-    align-items: center;
     justify-content: center;
-
-    padding:
-        calc(var(--header-height) + 8px)
-        0
-        8px;
-}
-
-.scene::before {
-    content: '';
-
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-
-    background: var(--scene-bg, transparent);
-    opacity: 0.72;
+    align-items: center;
 }
 
 .scene-inner {
     width: 100%;
     height: 100%;
-    min-height: 0;
-
     display: flex;
-    align-items: center;
     justify-content: center;
-
-    opacity: 0.6;
-    transform: translateX(24px) scale(0.98);
-
-    transition:
-        opacity 0.55s ease,
-        transform 0.65s ease;
-}
-
-.scene.is-active .scene-inner {
-    opacity: 1;
-    transform: translateX(0) scale(1);
+    align-items: center;
 }
 
 .scene-label {
     display: none;
 }
 
-/* ========================================
-   8. STORY IMAGE FRAME
-======================================== */
-
 .photo-frame {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    min-width: 0;
-    min-height: 0;
-
-    max-width: none;
-    max-height: none;
-
-    display: flex;
-    align-items: center;
+    display: flex !important;
     justify-content: center;
+    align-items: center;
 
-    overflow: hidden;
+    width: 100vw !important;
+    height: 100dvh !important;
 
+    max-width: none !important;
+    max-height: none !important;
+
+    aspect-ratio: auto !important;
+    margin: 0 !important;
     border-radius: 0;
     box-shadow: none;
-
     background: transparent;
 }
 
-/* Show the entire original image.
-   Never crop the captions. */
+.photo-frame img {
+    display: block !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    object-fit: contain !important;
+    object-position: center;
+}
+
+/* Keep story images below the sticky header */
+.story-section {
+  scroll-margin-top: 130px;
+}
+
+/* Prevent images from being cropped */
+.story-section img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Account for Instagram's mobile browser */
+@media (max-width: 600px) {
+  .story-section {
+    padding-top: 20px;
+  }
+}
+
+/* Keep horizontal swiping */
+/* Fix image visibility below the header */
+
+.scene {
+    padding: calc(var(--header-height) + 8px) 0 8px !important;
+    height: 100dvh !important;
+    box-sizing: border-box;
+}
+
+.scene-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.photo-frame {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+}
 
 .photo-frame img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    max-width: 100%;
-    max-height: 100%;
-
-    object-fit: contain;
-    object-position: center;
-
-    opacity: 1;
-    visibility: visible;
-}
-
-/* ========================================
-   9. IMAGE PLACEHOLDERS
-======================================== */
-
-.placeholder {
-    position: absolute;
-    inset: 0;
-
-    display: grid;
-    place-content: center;
-    gap: 14px;
-
-    padding: 30px;
-    text-align: center;
-
-    background: linear-gradient(
-        145deg,
-        #ffe2ed,
-        #e2dffc 60%,
-        #d6eafd
-    );
-}
-
-.placeholder-number {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(70px, 20vw, 110px);
-
-    color: #b782a8;
-}
-
-.placeholder span:last-child {
-    font-size: 12px;
-    color: #886d83;
-    line-height: 1.7;
-}
-
-.scene-inner.has-image .placeholder {
-    display: none;
-}
-
-/* ========================================
-   10. INTRO SLIDE
-======================================== */
-
-.intro {
-    display: grid;
-    place-items: center;
-
-    padding:
-        calc(var(--header-height) + 30px)
-        26px
-        65px;
-
-    text-align: center;
-}
-
-.intro-inner,
-.finale-content {
-    width: 100%;
-    max-width: 460px;
-}
-
-.eyebrow {
-    font-size: 11px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-
-    color: #aa7896;
-}
-
-.intro h1,
-.finale h2 {
-    font-family: 'Playfair Display', serif;
-
-    font-size: clamp(56px, 14vw, 88px);
-    line-height: 1.04;
-
-    margin: 22px 0;
-
-    color: #875474;
-}
-
-.intro h1 em {
-    font-weight: 600;
-    color: #b77fa8;
-}
-
-.intro p {
-    line-height: 1.8;
-    color: #876b80;
-}
-
-.start-link,
-.primary-btn {
-    display: inline-block;
-
-    margin-top: 32px;
-    padding: 15px 26px;
-
-    border: 0;
-    border-radius: 99px;
-
-    background: #aa6b94;
-    color: white;
-
-    font-weight: 700;
-    text-decoration: none;
-
-    box-shadow: 0 10px 25px #a96a9433;
-}
-
-.scroll-cue {
-    position: absolute;
-    bottom: 24px;
-
-    font-size: 11px;
-    letter-spacing: 0.1em;
-
-    color: #98788d;
-}
-
-/* ========================================
-   11. BIRTHDAY FINALE
-======================================== */
-
-.finale {
-    display: grid;
-    place-items: center;
-
-    padding:
-        calc(var(--header-height) + 25px)
-        26px
-        40px;
-
-    text-align: center;
-
-    background: linear-gradient(
-        160deg,
-        #ffe3f1,
-        #e6ddff 60%,
-        #d5eafb
-    );
-}
-
-.finale-content {
-    position: relative;
-    z-index: 2;
-
-    opacity: 0;
-    transform: translateY(30px);
-
-    transition:
-        opacity 1s ease,
-        transform 1s ease;
-}
-
-.finale.is-visible .finale-content {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.cake {
-    font-size: 70px;
-    margin-top: 18px;
-
-    animation: float 4s ease-in-out infinite;
-}
-
-.finale h2 {
-    font-size: clamp(44px, 11vw, 72px);
-}
-
-.birthday-message {
-    max-width: 360px;
-
-    margin: auto;
-
-    font-size: 15px;
-    line-height: 1.9;
-}
-
-.replay-link {
-    display: block;
-
-    margin-top: 24px;
-
-    color: #8c6481;
-    font-size: 13px;
-
-    text-underline-offset: 4px;
-}
-
-#confetti {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-
-    width: 100%;
-    height: 100%;
-
-    pointer-events: none;
-}
-
-@keyframes float {
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-/* ========================================
-   12. IPHONE / INSTAGRAM BROWSER
-======================================== */
-
-@media (max-width: 600px) {
-
-    :root {
-        --header-height: 68px;
-    }
-
-    .topbar {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .scene {
-        padding:
-            calc(var(--header-height) + 12px)
-            0
-            12px;
-    }
-
-    .photo-frame {
-        width: 100%;
-        height: 100%;
-    }
-
-    .photo-frame img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-
-    .intro h1 {
-        font-size: clamp(48px, 13vw, 70px);
-    }
-}
-
-/* ========================================
-   13. DESKTOP
-======================================== */
-
-@media (min-width: 700px) {
-
-    .scene {
-        padding:
-            calc(var(--header-height) + 20px)
-            20px
-            20px;
-    }
-
-    .photo-frame {
-        width: 100%;
-        max-width: 460px;
-    }
-
-    .intro,
-    .finale {
-        padding-top: 120px;
-    }
-}
-
-/* ========================================
-   14. ACCESSIBILITY
-======================================== */
-
-@media (prefers-reduced-motion: reduce) {
-
-    html,
-    main {
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-    }
-
-    .scene-inner {
-        opacity: 1;
-        transform: none;
-    }
-
-    .finale-content {
-        opacity: 1;
-        transform: none;
-    }
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
 }
