@@ -1,9 +1,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
 
-/* ========================================
-   GLOBAL SETTINGS
-======================================== */
+/* =========================================
+   1. GLOBAL SETTINGS
+========================================= */
 
 :root {
     --bg: #f9dce9;
@@ -27,9 +27,9 @@ body {
 }
 
 body {
-    font-family: 'DM Sans', sans-serif;
     color: var(--ink);
     background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
 }
 
 button,
@@ -42,9 +42,9 @@ button {
     cursor: pointer;
 }
 
-/* ========================================
-   BACKGROUND
-======================================== */
+/* =========================================
+   2. BACKGROUND
+========================================= */
 
 .ambient {
     position: fixed;
@@ -60,9 +60,9 @@ button {
     );
 }
 
-/* ========================================
-   HEADER
-======================================== */
+/* =========================================
+   3. NAVIGATION HEADER
+========================================= */
 
 .topbar {
     position: fixed;
@@ -73,15 +73,16 @@ button {
 
     height: var(--header-height);
 
-    padding: 12px 20px;
+    padding:
+        12px max(20px, env(safe-area-inset-right))
+        12px max(20px, env(safe-area-inset-left));
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
 
     background: rgba(255, 255, 255, 0.55);
-
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 }
@@ -104,15 +105,15 @@ button {
 
 #musicBtn {
     padding: 7px 12px;
-
     border: 1px solid #cda8bd;
     border-radius: 20px;
 
     background: rgba(255, 255, 255, 0.65);
     color: var(--ink);
-
     font-size: 12px;
 }
+
+/* Progress bar */
 
 .progress-track {
     position: absolute;
@@ -133,16 +134,15 @@ button {
     transition: width 0.2s ease;
 }
 
-/* ========================================
-   HORIZONTAL STORY CONTAINER
-======================================== */
+/* =========================================
+   4. HORIZONTAL STORY LAYOUT
+========================================= */
 
 main {
     display: flex;
     flex-direction: row;
 
     width: 100%;
-    height: 100vh;
     height: 100dvh;
 
     padding-top: var(--header-height);
@@ -153,8 +153,8 @@ main {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     overscroll-behavior-x: contain;
-
     scrollbar-width: none;
+
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x;
 }
@@ -163,15 +163,13 @@ main::-webkit-scrollbar {
     display: none;
 }
 
-/* Important for horizontal story layout */
+/* Allow all 25 generated scenes to join the slider */
 
 #story {
     display: contents;
 }
 
-/* ========================================
-   ALL SLIDES
-======================================== */
+/* Every slide occupies one full screen width */
 
 .intro,
 .scene,
@@ -182,7 +180,7 @@ main::-webkit-scrollbar {
     width: 100%;
     min-width: 100%;
 
-    height: 100%;
+    height: calc(100dvh - var(--header-height));
     min-height: 0;
 
     scroll-snap-align: start;
@@ -191,9 +189,9 @@ main::-webkit-scrollbar {
     overflow: hidden;
 }
 
-/* ========================================
-   INTRO
-======================================== */
+/* =========================================
+   5. INTRO SCREEN
+========================================= */
 
 .intro {
     display: grid;
@@ -210,6 +208,7 @@ main::-webkit-scrollbar {
 
 .eyebrow {
     color: #aa7896;
+
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.22em;
@@ -243,7 +242,7 @@ main::-webkit-scrollbar {
     margin-top: 32px;
     padding: 15px 26px;
 
-    border: none;
+    border: 0;
     border-radius: 99px;
 
     background: #aa6b94;
@@ -254,12 +253,15 @@ main::-webkit-scrollbar {
 
     box-shadow: 0 10px 25px #a96a9433;
 
-    transition: transform 0.25s ease;
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease;
 }
 
 .start-link:hover,
 .primary-btn:hover {
     transform: translateY(-3px);
+    background: #995c84;
 }
 
 .scroll-cue {
@@ -274,9 +276,9 @@ main::-webkit-scrollbar {
     text-align: center;
 }
 
-/* ========================================
-   STORY SCENES
-======================================== */
+/* =========================================
+   6. STORY PANELS
+========================================= */
 
 .scene {
     display: flex;
@@ -285,6 +287,8 @@ main::-webkit-scrollbar {
 
     padding: 0;
 }
+
+/* Different pastel background for each panel */
 
 .scene::before {
     content: "";
@@ -297,9 +301,7 @@ main::-webkit-scrollbar {
     opacity: 0.72;
 }
 
-/* ========================================
-   STORY IMAGE CONTAINER
-======================================== */
+/* Image container */
 
 .scene-inner {
     position: relative;
@@ -307,33 +309,37 @@ main::-webkit-scrollbar {
 
     width: 100%;
     height: 100%;
-    min-height: 0;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
     opacity: 0.6;
-    transform: translateX(20px) scale(0.98);
+    transform: translateX(24px) scale(0.98);
 
     transition:
         opacity 0.55s ease,
         transform 0.65s ease;
 }
 
+/* Fade in when panel becomes active */
+
 .scene.is-active .scene-inner {
     opacity: 1;
     transform: translateX(0) scale(1);
 }
 
+/* Hide extra scene label to maximize image space */
+
 .scene-label {
     display: none;
 }
 
-/* ========================================
-   COMPLETE IMAGE FIT
-   No cropping / no distortion
-======================================== */
+/* =========================================
+   7. PORTRAIT IMAGE
+   Original size: 941 x 1672
+========================================= */
 
 .photo-frame {
     position: relative;
@@ -342,16 +348,24 @@ main::-webkit-scrollbar {
     justify-content: center;
     align-items: center;
 
-    width: 100%;
-    height: 100%;
+    /* Match the original image aspect ratio */
+    aspect-ratio: 941 / 1672;
 
-    min-width: 0;
-    min-height: 0;
+    /* Fit within the screen below the header */
+    width: min(
+        100vw,
+        calc((100dvh - var(--header-height)) * 941 / 1672)
+    );
 
-    max-width: 100%;
-    max-height: 100%;
+    height: min(
+        calc(100dvh - var(--header-height)),
+        calc(100vw * 1672 / 941)
+    );
 
-    margin: 0;
+    max-width: none;
+    max-height: none;
+
+    margin: auto;
     padding: 0;
 
     border: none;
@@ -362,14 +376,16 @@ main::-webkit-scrollbar {
     overflow: hidden;
 }
 
+/* Full image visible, no cropping */
+
 .photo-frame img {
     display: block;
 
     width: 100%;
     height: 100%;
 
-    max-width: 100%;
-    max-height: 100%;
+    max-width: none;
+    max-height: none;
 
     object-fit: contain;
     object-position: center;
@@ -378,15 +394,16 @@ main::-webkit-scrollbar {
     visibility: visible;
 }
 
-/* ========================================
-   BIRTHDAY FINALE
-======================================== */
+/* =========================================
+   8. BIRTHDAY FINALE
+========================================= */
 
 .finale {
     display: grid;
     place-items: center;
 
     padding: 24px;
+
     text-align: center;
 
     background: linear-gradient(
@@ -420,6 +437,7 @@ main::-webkit-scrollbar {
 .cake {
     margin-top: 18px;
     font-size: 70px;
+
     animation: float 4s ease-in-out infinite;
 }
 
@@ -437,16 +455,18 @@ main::-webkit-scrollbar {
 
 .replay-link {
     display: block;
+
     margin-top: 24px;
 
     color: #8c6481;
     font-size: 13px;
+    text-decoration: underline;
     text-underline-offset: 4px;
 }
 
-/* ========================================
-   CONFETTI
-======================================== */
+/* =========================================
+   9. CONFETTI
+========================================= */
 
 #confetti {
     position: absolute;
@@ -459,9 +479,9 @@ main::-webkit-scrollbar {
     pointer-events: none;
 }
 
-/* ========================================
-   ANIMATIONS
-======================================== */
+/* =========================================
+   10. ANIMATIONS
+========================================= */
 
 @keyframes float {
     0%, 100% {
@@ -473,9 +493,9 @@ main::-webkit-scrollbar {
     }
 }
 
-/* ========================================
-   MOBILE / INSTAGRAM BROWSER
-======================================== */
+/* =========================================
+   11. MOBILE RESPONSIVENESS
+========================================= */
 
 @media (max-width: 600px) {
 
@@ -484,7 +504,8 @@ main::-webkit-scrollbar {
     }
 
     .topbar {
-        padding: 10px 14px;
+        padding-left: 14px;
+        padding-right: 14px;
     }
 
     .brand {
@@ -501,13 +522,13 @@ main::-webkit-scrollbar {
         font-size: 11px;
     }
 
+    .intro h1 {
+        font-size: clamp(48px, 13vw, 70px);
+    }
+
     .intro,
     .finale {
         padding: 20px;
-    }
-
-    .intro h1 {
-        font-size: clamp(48px, 13vw, 70px);
     }
 
     .finale h2 {
@@ -524,9 +545,9 @@ main::-webkit-scrollbar {
     }
 }
 
-/* ========================================
-   ACCESSIBILITY
-======================================== */
+/* =========================================
+   12. REDUCED MOTION
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -542,9 +563,61 @@ main::-webkit-scrollbar {
         transition-duration: 0.01ms !important;
     }
 
-    .scene-inner,
+    .scene-inner {
+        opacity: 1;
+        transform: none;
+    }
+
     .finale-content {
         opacity: 1;
         transform: none;
     }
+}
+
+/* Full-width story images */
+
+.photo-frame {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    overflow: hidden;
+}
+
+.photo-frame img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center;
+}
+
+
+/* Extra breathing room for story panels */
+
+.scene {
+    padding: 12px 0 16px;
+}
+
+.scene-inner {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.photo-frame {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
 }
