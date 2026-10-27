@@ -576,20 +576,6 @@ main::-webkit-scrollbar {
 
 /* Full photo always visible, blurred copy fills any leftover space */
 
-.scene::after {
-    content: "";
-    position: absolute;
-    inset: -40px;
-    z-index: 0;
-
-    background-image: var(--photo);
-    background-size: cover;
-    background-position: center;
-
-    filter: blur(28px) saturate(1.1);
-    opacity: 0.6;
-    pointer-events: none;
-}
 
 .photo-frame {
     width: 100% !important;
